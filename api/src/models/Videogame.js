@@ -12,23 +12,25 @@ module.exports = (sequelize) => {
     },
     name: {
       type: DataTypes.STRING,
+      unique: true,
       allowNull: false
     },
     description: {
-      type: DataTypes.TEXT,
-      allowNull: false,
-      defaultValue: ""
+      type: DataTypes.STRING,
+      allowNull: false
     },
     released: {
-      type: DataTypes.STRING,
-      allowNull: true
+      type: DataTypes.STRING
     },
     rating: {
-      type: DataTypes.INTEGER,
-      allowNull: true
+      type: DataTypes.FLOAT,
+      validate: {
+        min: 1,
+        max: 5,
+      }
     },
     platforms: {
-      type: DataTypes.STRING,
+      type: DataTypes.JSON,
       allowNull: false
     },
     createdInDB: {
@@ -36,5 +38,8 @@ module.exports = (sequelize) => {
       allowNull: false,
       defaultValue: true
     }
+  },
+  {
+    timestamps: false,
   });
 };

@@ -4,7 +4,7 @@ const { API_KEY } = process.env;
 const baseURL = 'https://api.rawg.io/api/';
 
 // const callApi = () => {
-//     fetch(`${baseURL}?key=${API_KEY}`)
+//     fetch(`${baseURL}games?key=${API_KEY}`)
 //     .then((response) => response.json())
 //     .then((json) => json.data.results.map(e => {
 //         console.log(e.name);
@@ -13,9 +13,13 @@ const baseURL = 'https://api.rawg.io/api/';
 // callApi()
 
 const getApiInfo = async() => {
-    const apiUrl = await axios.get(`${baseURL}games?key=${API_KEY}`);
-    const apiInfo = await apiUrl.data.results
-    .map(e => {
+    let allApiInfo = [];
+    for (let i=1; i<=5; i++) {
+        let apiUrl = await axios.get(`${baseURL}games?key=${API_KEY}&page=${i}`);
+        allApiInfo = [...allApiInfo, ...apiUrl.data.results];
+    }
+    console.log(allApiInfo.length);
+    const apiInfo = await allApiInfo.map(e => {
         return{
             id: e.id,
             name: e.name,
@@ -49,4 +53,4 @@ const getAllVideogames = async() =>{
     return allInfo;
 };
 
-module.exports = getAllVideogames;
+module.exports = {getApiInfo, getAllVideogames};
