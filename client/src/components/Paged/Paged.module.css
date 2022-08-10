@@ -1,0 +1,9 @@
+.paged_ul{
+    display: flex;
+    margin: 0 auto;
+}
+
+.paged_li{
+    list-style: none;
+    margin-right: 6px;
+}

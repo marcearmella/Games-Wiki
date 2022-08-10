@@ -1,50 +1,83 @@
 import {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import { getVideogames } from "../../redux/actions";
+import { getVideogames, filterGamesByGenre, getGenres, filterGamesByCreated, orderByName } from "../../redux/actions";
 import { Link } from "react-router-dom";
 import Card from '../Card';
+import Paged from '../Paged/Paged';
 
 export default function Home(){
     const dispatch = useDispatch();
     const allVideogames = useSelector((state) => state.videogames);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [gamesPerPage, setGamesPerPage] = useState(15);
+    const indexLastGame = currentPage * gamesPerPage;
+    const indexFirstGame = indexLastGame - gamesPerPage;
+    const currentGames = allVideogames.slice(indexFirstGame,indexLastGame);
+    const [order, setOrder] = useState('');
+
+    const paged = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    }
 
     useEffect(()=>{
-        dispatch(getVideogames())
+        dispatch(getVideogames());
+        dispatch(getGenres());
     },[dispatch]);
 
-    function handleClick(e){
+    function handleReload(e){
         e.preventDefault();
         dispatch(getVideogames());
+    }
+
+    function handleFilterByGenre(e){
+        e.preventDefault();
+        setCurrentPage(1);
+        dispatch(filterGamesByGenre(e.target.value));
+    }
+
+    function handleFilterByCreated(e){
+        e.preventDefault();
+        setCurrentPage(1);
+        dispatch(filterGamesByCreated(e.target.value));
+    }
+
+    function handleOrderByName(e){
+        e.preventDefault();
+        dispatch(orderByName(e.target.value));
+        setCurrentPage(1);
+        setOrder(`Orderer ${e.target.value}`);
     }
 
     return(
         <div>
             <Link to='/videogames'>Create Videogame</Link>
             <h1>Videogames</h1>
-            <button onClick={e => {handleClick(e)}}>
+            <button onClick={e => {handleReload(e)}}>
                 Reload games
             </button>
             <div>
-                <p>by name</p>
-                <select>
+                <p>Order by name</p>
+                <select onChange={e => handleOrderByName(e)}>
                     <option value='ascending'>asc</option>
                     <option value='descending'>des</option>
                 </select>
                 <p>by genre</p>
-                <select>
-                    <option value='action'>action</option>
-                    <option value='adventure'>adventure</option>
-                    <option value='strategy'>adventure</option>
+                <select onChange={e => handleFilterByGenre(e)}>
+                    <option value='all'>all</option>
+                    <option value='Action'>action</option>
+                    <option value='Adventure'>adventure</option>
+                    <option value='Strategy'>strategy</option>
                 </select>
                 <p>created</p>
-                <select>
+                <select onChange={e => handleFilterByCreated(e)}>
+                    <option value='all'>all games</option>
                     <option value='createdGames'>created</option>
-                    <option value='allGames'>all games</option>
                     <option value='apiGames'>api</option>
                 </select>
             </div>
+            <Paged gamesPerPage={gamesPerPage} allVideogames={allVideogames.length} paged={paged} />
             {
-                allVideogames?.map(e => {
+                currentGames?.map(e => {
                     return(
                         <Card name={e.name} image={e.img} />
                     );
