@@ -1,4 +1,4 @@
-import { GET_ALL_VIDEOGAMES, GET_GENRES, FILTER_BY_GENRE, FILTER_BY_CREATED, ORDER_BY_NAME } from "../actions";
+import { GET_ALL_VIDEOGAMES, GET_GENRES, FILTER_BY_GENRE, FILTER_BY_CREATED, ORDER_BY_NAME, ORDER_BY_RATING, GET_VIDEOGAMES_BY_NAME } from "../actions";
 
 const initialState = {
     allVideogames: [],
@@ -28,7 +28,7 @@ function rootReducer(state = initialState, action){
                 ...state,
                 videogames: gamesFilteredByGenre
             }
-        
+
         case FILTER_BY_CREATED:
             let allVideogames2 = state.allVideogames;
             let gamesFilteredByCreated = action.payload === 'createdGames' ? 
@@ -40,7 +40,7 @@ function rootReducer(state = initialState, action){
             }
 
         case ORDER_BY_NAME:
-            let gamesInOrder = action.payload === 'ascending' ? 
+            let gamesInOrderByName = action.payload === 'ascending' ? 
                                 state.videogames.sort(function(a,b){
                                     if(a.name > b.name) return 1;
                                     if(b.name > a.name) return -1;
@@ -53,7 +53,30 @@ function rootReducer(state = initialState, action){
                                 })
             return{
                 ...state,
-                videogames: gamesInOrder
+                videogames: gamesInOrderByName
+            }
+        
+        case ORDER_BY_RATING:
+            let gamesInOrdeByRating = action.payload === 'lowest' ?
+                                state.videogames.sort(function(a,b){
+                                    if(a.rating > b.rating) return 1;
+                                    if(b.rating > a.rating) return -1;
+                                    return 0;
+                                }) :
+                                state.videogames.sort(function(a,b){
+                                    if(a.rating > b.rating) return -1;
+                                    if(b.rating > a.rating) return 1;
+                                    return 0;
+                                })
+            return{
+                ...state,
+                videogames: gamesInOrdeByRating
+            }
+        
+        case GET_VIDEOGAMES_BY_NAME:
+            return{
+                ...state,
+                videogames: action.payload
             }
 
         default: return state;

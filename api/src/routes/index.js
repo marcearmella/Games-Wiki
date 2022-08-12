@@ -2,9 +2,13 @@ const { Router } = require('express');
 // Importar todos los routers;
 // Ejemplo: const authRouter = require('./auth.js');
 
+const axios = require('axios');
 const router = Router();
 const {getAllVideogames, getApiInfo} = require('./calls.js');
 const {Genres, Videogame} = require('../db');
+
+const { API_KEY } = process.env;
+const baseURL = 'https://api.rawg.io/api/';
 //const Videogame = require('../models/Videogame.js');
 // Configurar los routers
 // Ejemplo: router.use('/auth', authRouter);
@@ -29,50 +33,88 @@ router.get('/videogames/:id', async(req, res) => {
     }
 });
 
-router.post('/videogames', async(req, res) => {
-    let {
-        name,
-        description,
-        released,
-        rating,
-        platforms,
-        genres,
-        createdInDB
-    } = req.body;
+const createGame = async(name, description, released, rating, platforms, genres )=>{
+    if(!name || !platforms || !description) throw new Error("Missing required parameters")
 
-    if (!name || !platforms || !description) {
-        throw new Error("Name, platform or description missing.");
+    let newGame = await Videogame.create({
+        name, description, released, rating, platforms, genres
+     });
+
+    let genre = await Genres.findAll({
+            where:{name: genres}
+    });
+
+    newGame.addGenres(genre);
+    return newGame
+
+};
+router.post("/videogames", async(req,res)=>{
+    const {name, description, released, rating, platforms, genres} = req.body;
+    try {
+        res.send(await createGame(name, description, released, rating, platforms, genres));
+    } catch (error) {
+        res.status(404).send(error)
     }
+})
+        
+// router.post('/videogames', async(req, res) => {
+//     let {
+//         name,
+//         description,
+//         released,
+//         rating,
+//         platforms,
+//         genres,
+//         createdInDB
+//     } = req.body;
+    
+//     if (!name || !platforms || !description) {
+//         throw new Error("Name, platform or description missing.");
+//     }
+    
+//     let videogameCreated = await Videogame.create({
+//         name,
+//         description,
+//         released,
+//         rating,
+//         platforms,
+//         createdInDB
+//     })
 
-    let videogameCreated = await Videogame.create({
-        name,
-        description,
-        released,
-        rating,
-        platforms,
-        createdInDB
-    })
+//     let genresDb = await Genres.findAll({
+//         where: {name : genres}
+//     })
 
-    let genresDb = await Genres.findAll({
-        where: {name : genres}
-    })
-
-    videogameCreated.addGenres(genresDb);
-    res.send('Videogame created.');
-});
+//     videogameCreated.addGenres(genresDb);
+//     res.send('Videogame created.');
+// });
 
 router.get('/genres', async(req, res) => {
-    const apiInfo = await getApiInfo();
-    const genres = apiInfo.map( e => e.genres);
-    const genre = genres.map(e => { for(let i=0; i<e.length;i++) return e[i] })
 
-    genre.forEach(e => {
-        Genres.findOrCreate({
-            where: { name: e}
-        })
-    })
+    const genresUrl = await axios.get(`${baseURL}genres?key=${API_KEY}`);
+    let genresData = await genresUrl.data;
+    let genres = genresData.results.map(e => {
+        return {
+            name: e.name
+        };
+    });
+    
+    for (let i=0; i<genres.length; i++) {
+        await Genres.findOrCreate({
+            where: { name: genres[i].name }
+        });
+    }
+
+    // genres.forEach( genre => {
+    //     Genres.findOrCreate({
+    //         where:{ name : genre }
+    //     })
+    // }); 
+
     const allGenres = await Genres.findAll();
     res.send(allGenres);
+
 });
+
 
 module.exports = router;

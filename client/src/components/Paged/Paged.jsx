@@ -15,7 +15,7 @@ export default function Paged({gamesPerPage, allVideogames, paged}){
                 {
                     pageNumber?.map( num => (
                         <li className={style.paged_li} key={num}>
-                            <a onClick={() => paged(num)}>{num}</a>
+                            <button onClick={() => paged(num)}>{num}</button>
                         </li>
                     ))
                 }

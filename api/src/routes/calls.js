@@ -18,7 +18,6 @@ const getApiInfo = async() => {
         let apiUrl = await axios.get(`${baseURL}games?key=${API_KEY}&page=${i}`);
         allApiInfo = [...allApiInfo, ...apiUrl.data.results];
     }
-    console.log(allApiInfo.length);
     const apiInfo = await allApiInfo.map(e => {
         return{
             id: e.id,

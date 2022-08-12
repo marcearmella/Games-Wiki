@@ -1,9 +1,10 @@
 import {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import { getVideogames, filterGamesByGenre, getGenres, filterGamesByCreated, orderByName } from "../../redux/actions";
+import { getVideogames, filterGamesByGenre, getGenres, filterGamesByCreated, orderByName, orderByRating } from "../../redux/actions";
 import { Link } from "react-router-dom";
-import Card from '../Card';
+import Card from '../Card/Card';
 import Paged from '../Paged/Paged';
+import SearchBar from '../SearchBar/SearchBar';
 
 export default function Home(){
     const dispatch = useDispatch();
@@ -27,39 +28,53 @@ export default function Home(){
     function handleReload(e){
         e.preventDefault();
         dispatch(getVideogames());
-    }
+    };
 
     function handleFilterByGenre(e){
         e.preventDefault();
         setCurrentPage(1);
         dispatch(filterGamesByGenre(e.target.value));
-    }
+    };
 
     function handleFilterByCreated(e){
         e.preventDefault();
         setCurrentPage(1);
         dispatch(filterGamesByCreated(e.target.value));
-    }
+    };
 
     function handleOrderByName(e){
         e.preventDefault();
         dispatch(orderByName(e.target.value));
         setCurrentPage(1);
         setOrder(`Orderer ${e.target.value}`);
+    };
+
+    function handleOrderByRating(e){
+        e.preventDefault();
+        dispatch(orderByRating(e.target.value));
+        setCurrentPage(1);
+        setOrder(`Orderer ${e.target.value}`);
     }
 
     return(
         <div>
-            <Link to='/videogames'>Create Videogame</Link>
+            <Link to='/videogameform'>Create Videogame</Link>
             <h1>Videogames</h1>
             <button onClick={e => {handleReload(e)}}>
                 Reload games
             </button>
             <div>
                 <p>Order by name</p>
-                <select onChange={e => handleOrderByName(e)}>
-                    <option value='ascending'>asc</option>
-                    <option value='descending'>des</option>
+                <select defaultValue="byname" onChange={e => handleOrderByName(e)}>
+                    <option disabled value="byname">a-z</option>
+                    <option value='ascending'>Ascending</option>
+                    <option value='descending'>Descending</option>
+                </select>
+                <p>Order by rating</p>
+                <select defaultValue="byrating" onChange={e => handleOrderByRating(e)}>
+                    <option disabled value="byrating">1-5</option>
+                    <option value='highest'>Highest</option>
+                    <option value='lowest'>Lowest</option>
                 </select>
                 <p>by genre</p>
                 <select onChange={e => handleFilterByGenre(e)}>
@@ -76,10 +91,13 @@ export default function Home(){
                 </select>
             </div>
             <Paged gamesPerPage={gamesPerPage} allVideogames={allVideogames.length} paged={paged} />
+            <SearchBar />
             {
                 currentGames?.map(e => {
                     return(
-                        <Card name={e.name} image={e.img} />
+                        <div key={e.id}>
+                            <Card name={e.name} image={e.img} genres={e.genres} id={e.id} />
+                        </div>
                     );
                 })
             }
