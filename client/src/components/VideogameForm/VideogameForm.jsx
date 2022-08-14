@@ -6,6 +6,12 @@ import { useDispatch, useSelector } from "react-redux";
 export default function VideogameForm(){
     let dispatch = useDispatch();
     let genres =  useSelector(state => state.genres);
+    let history = useHistory();
+    let [errors, setErrors] = useState("");
+
+    useEffect(() => {
+        dispatch(getGenres());
+    },[dispatch]);
 
     let availablePlatforms = [
         {id: 0, name: "PC"},
@@ -23,57 +29,132 @@ export default function VideogameForm(){
         genres: []
     });
 
-    useEffect(() => {
-        dispatch(getGenres());
-    },[]);
+    let handleChange = e => {
+        setInput({
+            ...input,
+            [e.target.name] : e.target.value
+        })
+    }
+    
+    let handleCheckbox = e => {
+        if(e.target.checked){
+            e.target.name === 'platforms' ?
+            setInput({
+                ...input,
+                platforms : [...input.platforms , e.target.value]
+            }) :
+            setInput({
+                ...input,
+                genres : [...input.genres , e.target.value]
+            })
+        }
+    }
+
+    let validateForm = () => {
+        if(!input.name){
+            setErrors("Name is missing");
+            return false;
+        }
+        if(input.name.length > 60){
+            setErrors("The maximum characters for name is 60");
+            return false;
+        }
+        if( !/^[a-zA-Z\s]*$/.test(input.name) ){
+            setErrors("Invalid name");
+            return false;
+        }
+        if(!input.description){
+            setErrors("Description is required");
+            return false;
+        }
+        if(!input.platforms.length){
+            setErrors("At least one platform required");
+            return false;
+        }
+        if(!input.genres.length){
+            setErrors("At least one genre required");
+            return false;
+        }
+        return true;
+    }
+    
+    let handleSubmit = e => {
+        e.preventDefault();
+        let validated = validateForm();
+        if(validated){
+            dispatch(createVideogame(input));
+            setInput({
+                name: '',
+                description: '',
+                released: '',
+                rating: 0,
+                platforms: [],
+                genres: []
+            })
+            alert("successful");
+            history.push('/home');
+        }
+    }
 
     return(
         <div>
             <Link to='/home'><button>back</button></Link>
             <h1>Upload a videogame</h1>
-            <form>
+            <form onSubmit={e => handleSubmit(e)}>
                 <div>
-                  <label>Name *</label>
-                  <input
-                    type='text'
-                    // value={input.name}
-                    name='name'
-                    // onChange={(e) => handleChange(e)}
-                  ></input>
-                </div>
+                    <label>Name *</label>
+                    <input
+                      type='text'
+                      value={input.name}
+                      name='name'
+                      onChange={(e) => handleChange(e)}
+                      required
+                    ></input>
+                
+                    <label>Description *</label>
+                    <input
+                      type='text'
+                      value={input.description}
+                      name='description'
+                      onChange={(e) => handleChange(e)}
+                      required
+                    ></input>
 
-                <div>
-                  <label>Description *</label>
-                  <input
-                    type='text'
-                    // value={input.description}
-                    name='description'
-                    // onChange={(e) => handleChange(e)}
-                  ></input>
+                    <label>Released Date</label>
+                    <input
+                      type='text'
+                      value={input.released}
+                      name='released'
+                      placeholder='dd/mm/aaaa'
+                      onChange={(e) => handleChange(e)}
+                    ></input>
 
-                  <label>Released Date *</label>
-                  <input
-                    type='text'
-                    // value={input.released}
-                    name='released'
-                    placeholder='dd/mm/aaaa'
-                    // onChange={(e) => handleChange(e)}
-                  ></input>
+                    <label>Rating</label>
+                    <input
+                      type="range"
+                      min="1"
+                      max="5"
+                      value={input.rating}
+                      name='rating'
+                      onChange={(e) => handleChange(e)}
+                     />
 
-                  <label>Rating *</label>
-                  <input
-                    type="range"
-                    min="1"
-                    max="5"
-                    // value={input.rating}
-                    name='rating'
-                    // onChange={(e) => handleChange(e)}
-                   />
+                    {
+                        //Platforms
+                        availablePlatforms.map( e => <label key={e.id}>{e.name}
+                            <input type="checkbox" value={e.name} name="platforms" onChange={(e) => handleCheckbox(e)} />
+                        </label> )
+                    }
 
-                  <label>Platforms</label>
-                  {
-                    availablePlatforms.map( e => <div><label>{e.name}</label><input type="checkbox" value={e.name} name="platforms" /> </div>)
-                  }
+                    {
+                        //Genres
+                        genres.map( e => <label key={e.id}>{e.name}
+                            <input type="checkbox" value={e.name} name="genres" onChange={(e) => handleCheckbox(e)} />
+                        </label> )
+                    }
+
+                    { errors ? <span>{errors}</span> : null }
+                    <button type="submit">SEND</button>
                 </div>
             </form>
         </div>

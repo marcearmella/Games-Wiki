@@ -2,7 +2,8 @@ import './App.css';
 import {BrowserRouter,Route,Switch} from 'react-router-dom';
 import LandingPage from './components/LandingPage/LandingPage';
 import Home from './components/Home/Home';
-import VideogameForm from './components/VideogameForm/VideogameForm'
+import VideogameForm from './components/VideogameForm/VideogameForm';
+import Detail from './components/Detail/Detail'
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
         <Switch>
           <Route exact path='/home' component={Home} />
           <Route exact path='/videogameform' component={VideogameForm} />
+          <Route exact path='gamedatail' component={Detail} />
           <Route exact path='/' component={LandingPage} />
         </Switch>
       </div>

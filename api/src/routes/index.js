@@ -48,6 +48,7 @@ const createGame = async(name, description, released, rating, platforms, genres 
     return newGame
 
 };
+
 router.post("/videogames", async(req,res)=>{
     const {name, description, released, rating, platforms, genres} = req.body;
     try {
@@ -104,13 +105,6 @@ router.get('/genres', async(req, res) => {
             where: { name: genres[i].name }
         });
     }
-
-    // genres.forEach( genre => {
-    //     Genres.findOrCreate({
-    //         where:{ name : genre }
-    //     })
-    // }); 
-
     const allGenres = await Genres.findAll();
     res.send(allGenres);
 

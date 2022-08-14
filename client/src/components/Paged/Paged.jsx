@@ -9,18 +9,27 @@ export default function Paged({gamesPerPage, allVideogames, paged}){
         pageNumber.push(i);
     }
 
-    return(
-        <nav>
-            <ul className={style.paged_ul}>
-                {
-                    pageNumber?.map( num => (
-                        <li className={style.paged_li} key={num}>
-                            <button onClick={() => paged(num)}>{num}</button>
-                        </li>
-                    ))
-                }
-            </ul>
-        </nav>
-    );
+    if(!allVideogames){
+        return(
+            <div>
+                <img src="https://thumbs.gfycat.com/HardPiercingEastrussiancoursinghounds-max-1mb.gif" alt="loading" />
+            </div>
+        ) 
+    }else{
+    
+        return(
+            <nav>
+                <ul className={style.paged_ul}>
+                    {
+                        pageNumber?.map( num => (
+                            <li className={style.paged_li} key={num}>
+                                <button onClick={() => paged(num)}>{num}</button>
+                            </li>
+                        ))
+                    }
+                </ul>
+            </nav>
+        );
 
+    }
 }
