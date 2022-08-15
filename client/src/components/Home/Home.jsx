@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import { getVideogames, filterGamesByGenre, getGenres, filterGamesByCreated, orderByName, orderByRating } from "../../redux/actions";
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import Card from '../Card/Card';
 import Paged from '../Paged/Paged';
 import SearchBar from '../SearchBar/SearchBar';
@@ -60,7 +60,7 @@ export default function Home(){
 
     return(
         <div>
-            <Link to='/videogameform'>Create Videogame</Link>
+            <NavLink to='/videogameform'>Create Videogame</NavLink>
             <h1>Videogames</h1>
             <button onClick={e => {handleReload(e)}}>
                 Reload games
@@ -103,7 +103,7 @@ export default function Home(){
                 currentGames?.map(e => {
                     return(
                         <div key={e.id}>
-                            <NavLink to='/gamedatail'><Card name={e.name} image={e.img} genres={e.genres} id={e.id} /></NavLink>
+                            <Card name={e.name} image={e.img} genres={e.genres} id={e.id} />
                         </div>
                     );
                 })

@@ -24,7 +24,7 @@ export default function VideogameForm(){
         name: '',
         description: '',
         released: '',
-        rating: 0,
+        rating: 1,
         platforms: [],
         genres: []
     });

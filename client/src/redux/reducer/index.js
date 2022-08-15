@@ -1,9 +1,10 @@
-import { GET_ALL_VIDEOGAMES, GET_GENRES, FILTER_BY_GENRE, FILTER_BY_CREATED, ORDER_BY_NAME, ORDER_BY_RATING, GET_VIDEOGAMES_BY_NAME } from "../actions";
+import { GET_ALL_VIDEOGAMES, GET_GENRES, FILTER_BY_GENRE, FILTER_BY_CREATED, ORDER_BY_NAME, ORDER_BY_RATING, GET_VIDEOGAMES_BY_NAME, GET_DETAIL } from "../actions";
 
 const initialState = {
     allVideogames: [],
     videogames: [],
-    genres: []
+    genres: [],
+    detail: []
 }
 
 function rootReducer(state = initialState, action){
@@ -23,6 +24,7 @@ function rootReducer(state = initialState, action){
 
         case FILTER_BY_GENRE:
             let allVideogames = state.allVideogames;
+            //console.log(allVideogames);
             let gamesFilteredByGenre = action.payload === 'all' ? allVideogames : allVideogames.filter(e => e.genres.includes(action.payload));
             return{
                 ...state,
@@ -77,6 +79,12 @@ function rootReducer(state = initialState, action){
             return{
                 ...state,
                 videogames: action.payload
+            }
+
+        case GET_DETAIL:
+            return{
+                ...state,
+                detail: action.payload
             }
 
         default: return state;

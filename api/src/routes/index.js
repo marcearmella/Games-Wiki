@@ -4,7 +4,7 @@ const { Router } = require('express');
 
 const axios = require('axios');
 const router = Router();
-const {getAllVideogames, getApiInfo} = require('./calls.js');
+const {getAllVideogames, getGameDetail, getApiInfo} = require('./calls.js');
 const {Genres, Videogame} = require('../db');
 
 const { API_KEY } = process.env;
@@ -24,15 +24,6 @@ router.get('/videogames', async(req, res) => {
     }
 });
 
-router.get('/videogames/:id', async(req, res) => {
-    let id = req.params.id;
-    let allVideogames = await getAllVideogames();
-    if(id){
-        let gameId = await allVideogames.filter(e => e.id == id);
-        gameId.length ? res.status(200).json(gameId) : res.status(404).send('No se encontró el personaje');
-    }
-});
-
 const createGame = async(name, description, released, rating, platforms, genres )=>{
     if(!name || !platforms || !description) throw new Error("Missing required parameters")
 
@@ -40,11 +31,11 @@ const createGame = async(name, description, released, rating, platforms, genres 
         name, description, released, rating, platforms, genres
      });
 
-    let genre = await Genres.findAll({
+     let genre = await Genres.findAll({
             where:{name: genres}
-    });
-
-    newGame.addGenres(genre);
+        });
+        
+        newGame.addGenres(genre);
     return newGame
 
 };
@@ -57,38 +48,6 @@ router.post("/videogames", async(req,res)=>{
         res.status(404).send(error)
     }
 })
-        
-// router.post('/videogames', async(req, res) => {
-//     let {
-//         name,
-//         description,
-//         released,
-//         rating,
-//         platforms,
-//         genres,
-//         createdInDB
-//     } = req.body;
-    
-//     if (!name || !platforms || !description) {
-//         throw new Error("Name, platform or description missing.");
-//     }
-    
-//     let videogameCreated = await Videogame.create({
-//         name,
-//         description,
-//         released,
-//         rating,
-//         platforms,
-//         createdInDB
-//     })
-
-//     let genresDb = await Genres.findAll({
-//         where: {name : genres}
-//     })
-
-//     videogameCreated.addGenres(genresDb);
-//     res.send('Videogame created.');
-// });
 
 router.get('/genres', async(req, res) => {
 
@@ -107,7 +66,19 @@ router.get('/genres', async(req, res) => {
     }
     const allGenres = await Genres.findAll();
     res.send(allGenres);
+    
+});
 
+router.get('/videogames/:id', async(req, res) => {
+    let id = req.params.id;
+    let allVideogames = await getAllVideogames();
+    if(id.length > 8){
+        let gameId = await allVideogames.filter(e => e.id == id);
+        gameId.length ? res.status(200).json(gameId) : res.status(404).send('No se encontró el personaje');
+    }else{
+        let apiGame = await getGameDetail(id);
+        apiGame[0].id.toString().length ? res.status(200).json(apiGame) : res.status(404).send('No se encontró el personaje');
+    }
 });
 
 

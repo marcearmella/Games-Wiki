@@ -23,6 +23,7 @@ const getApiInfo = async() => {
             id: e.id,
             name: e.name,
             img: e.background_image,
+            description: e.description,
             released: e.released,
             rating: e.rating,
             platforms: e.platforms.map(e => e.platform.name),
@@ -33,7 +34,7 @@ const getApiInfo = async() => {
 };
 
 const getDBInfo = async() => {
-    return await Videogame.findAll({
+    let dbGames = await Videogame.findAll({
         include: {
             model: Genres,
             attributes: ['name'],
@@ -42,6 +43,21 @@ const getDBInfo = async() => {
             }
         }
     })
+    let dbGamesModified = dbGames.map(e => {
+        return{
+            id: e.dataValues.id,
+            name: e.dataValues.name,
+            description: e.dataValues.description,
+            released: e.dataValues.released,
+            rating: e.dataValues.rating,
+            platforms: e.dataValues.platforms,
+            genres: e.dataValues.genres.map(e => e.name),
+            createdInDB: e.dataValues.createdInDB
+        }
+    });
+    
+    return dbGamesModified;
+
 };
 
 const getAllVideogames = async() =>{
@@ -52,4 +68,21 @@ const getAllVideogames = async() =>{
     return allInfo;
 };
 
-module.exports = {getApiInfo, getAllVideogames};
+const getGameDetail = async(id) => {
+    if (id.length < 8){
+        let response = await axios.get(`${baseURL}games/${id}?key=${API_KEY}`);
+        let videogame = [{
+          name: response.data.name,
+          id: response.data.id,
+          description: response.data.description,
+          img: response.data.background_image,
+          released: response.data.released,
+          rating: response.data.rating,
+          genres: response.data.genres.map((g) => g.name),
+          platforms: response.data.platforms.map((p) => p.platform.name),
+        }];
+        return videogame;
+    }
+}
+
+module.exports = {getApiInfo, getAllVideogames, getGameDetail};
