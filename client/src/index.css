@@ -1,18 +1,36 @@
+:root{
+  --light-blue: #0B59B5;
+  --cream: #FFEDDA;
+  --orange: #FFB830;
+  --red: #FF2442;
+  --light-red: #ff244165;
+}
+
 *{
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+  font-family: geometr415
 }
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  font-family: geometr415, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: #0B59B5;
+}
+
+@font-face{
+  font-family: geometr415;
+  src: url(./fuentes/GEOMETR415-BLK-BT-BLACK.TTF);
+  font-style: normal;
+  font-weight: normal;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: geometr415, source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }

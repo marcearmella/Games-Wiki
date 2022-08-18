@@ -1,0 +1,87 @@
+/* NAV BAR */
+.navBar{
+    background: var(--cream);
+    display: flex;
+    height: 100px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+}
+
+.logo{
+    color: var(--red);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo h1{
+    font-size: 2.3em;
+}
+
+.logo h2{
+    font-size: 1.8em;
+}
+
+.selectsContainer{
+    display: flex;
+    flex-direction: column;
+    color: var(--red);
+    align-items: center;
+    justify-content: center;
+}
+
+.orderSelect{
+    margin-bottom: 10px;
+}
+
+.orderSelect select{
+    margin: 0 4px;
+}
+
+.filterSelect select{
+    margin: 0 4px;
+}
+
+.formContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    height: 100%;
+}
+
+.createGames{
+    text-decoration: none;
+    font-size: 1.4em;
+    padding: 5px 10px;
+    border-radius: 5px;
+    background: none;
+    color: var(--light-blue);
+    text-decoration: underline;
+}
+
+.formContainer button{
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    padding: 3px 6px;
+    background: none;
+    color: var(--light-blue);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+/* Main */
+
+.cardsContainer{
+    margin: 0 auto;
+    width: 95%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}

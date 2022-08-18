@@ -24,7 +24,6 @@ function rootReducer(state = initialState, action){
 
         case FILTER_BY_GENRE:
             let allVideogames = state.allVideogames;
-            //console.log(allVideogames);
             let gamesFilteredByGenre = action.payload === 'all' ? allVideogames : allVideogames.filter(e => e.genres.includes(action.payload));
             return{
                 ...state,

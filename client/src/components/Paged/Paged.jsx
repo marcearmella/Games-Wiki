@@ -1,5 +1,5 @@
 import React from "react";
-import style from './Paged.module.css';
+import styles from './Paged.module.css';
 
 export default function Paged({gamesPerPage, allVideogames, paged}){
 
@@ -16,13 +16,13 @@ export default function Paged({gamesPerPage, allVideogames, paged}){
             </div>
         ) 
     }else{
-    
         return(
-            <nav>
-                <ul className={style.paged_ul}>
+            <nav className={styles.container}>
+                <ul className={styles.ul}>
+                    <li className={styles.li}>Pages</li>
                     {
                         pageNumber?.map( num => (
-                            <li className={style.paged_li} key={num}>
+                            <li className={styles.li} key={num}>
                                 <button onClick={() => paged(num)}>{num}</button>
                             </li>
                         ))

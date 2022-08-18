@@ -1,9 +1,37 @@
-.paged_ul{
+.container{
+    background: var(--cream);
+    width: 100%;
+    border-bottom: 1px solid var(--red);
+    transition: .4 linear;
+    padding-top: 6px;
     display: flex;
-    margin: 0 auto;
 }
 
-.paged_li{
+.ul{
+    display: flex;
+    margin: 0 auto;
+    background: var(--red);
+}
+
+.li{
     list-style: none;
-    margin-right: 6px;
+    border-right: 1px solid var(--cream);
+    color: #fff;
+}
+
+.li:first-child{
+    padding: 4px 8px;
+}
+
+.li:last-child{
+    border-right: none;
+}
+
+.li button{
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-size: 1.1em;
+    color: var(--cream);
+    padding: 5px 10px;
 }

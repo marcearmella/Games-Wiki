@@ -42,7 +42,7 @@ const getDBInfo = async() => {
                 attributes: []
             }
         }
-    })
+    });
     let dbGamesModified = dbGames.map(e => {
         return{
             id: e.dataValues.id,
@@ -83,6 +83,6 @@ const getGameDetail = async(id) => {
         }];
         return videogame;
     }
-}
+};
 
 module.exports = {getApiInfo, getAllVideogames, getGameDetail};
