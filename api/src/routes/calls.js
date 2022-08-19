@@ -12,25 +12,54 @@ const baseURL = 'https://api.rawg.io/api/';
 // };
 // callApi()
 
-const getApiInfo = async() => {
-    let allApiInfo = [];
-    for (let i=1; i<=5; i++) {
-        let apiUrl = await axios.get(`${baseURL}games?key=${API_KEY}&page=${i}`);
-        allApiInfo = [...allApiInfo, ...apiUrl.data.results];
+const getApiInfo = () => {
+    // let allApiInfo = [];
+    // for (let i=1; i<=5; i++) {
+    //     let apiUrl = await axios.get(`${baseURL}games?key=${API_KEY}&page=${i}`);
+    //     allApiInfo = [...allApiInfo, ...apiUrl.data.results];
+    // }
+    // const apiInfo = await allApiInfo.map(e => {
+    //     return{
+    //         id: e.id,
+    //         name: e.name,
+    //         img: e.background_image,
+    //         description: e.description,
+    //         released: e.released,
+    //         rating: e.rating,
+    //         platforms: e.platforms.map(e => e.platform.name),
+    //         genres: e.genres.map(e => e.name)
+    //     }
+    // });
+    // return apiInfo;
+
+    let URLs = [];
+    const apiUrl = `${baseURL}games?key=${API_KEY}&page=`;
+    for (let i=1; i<=5; i++){
+        URLs.push(apiUrl + i);
     }
-    const apiInfo = await allApiInfo.map(e => {
-        return{
-            id: e.id,
-            name: e.name,
-            img: e.background_image,
-            description: e.description,
-            released: e.released,
-            rating: e.rating,
-            platforms: e.platforms.map(e => e.platform.name),
-            genres: e.genres.map(e => e.name)
-        }
-    });
-    return apiInfo;
+
+    function getAllData(URLs){
+        return Promise.all(URLs.map(e => fetchData(e)));
+    }
+
+    function fetchData(url){
+        return axios.get(url).then( e => e.data.results.map(e => {
+                return{
+                    id: e.id,
+                    name: e.name,
+                    img: e.background_image,
+                    description: e.description,
+                    released: e.released,
+                    rating: e.rating,
+                    platforms: e.platforms.map(e => e.platform.name),
+                    genres: e.genres.map(e => e.name)
+                }
+            }))
+            .catch(err => console.log(err))
+    }
+    
+    let apiGames = getAllData(URLs).then( resp => resp.flat() ).catch(err => console.log(err));
+    return apiGames;
 };
 
 const getDBInfo = async() => {
