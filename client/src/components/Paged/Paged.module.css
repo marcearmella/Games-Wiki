@@ -1,26 +1,26 @@
 .container{
-    background: var(--cream);
+    background: var(--red);
     width: 100%;
-    border-bottom: 1px solid var(--red);
     transition: .4 linear;
-    padding-top: 6px;
+    padding-top: 0;
     display: flex;
+    margin-bottom: 40px;
 }
 
 .ul{
     display: flex;
     margin: 0 auto;
-    background: var(--red);
 }
 
 .li{
     list-style: none;
     border-right: 1px solid var(--cream);
     color: #fff;
+    padding: 6px 10px;
 }
 
 .li:first-child{
-    padding: 4px 8px;
+    padding: 6px 8px;
 }
 
 .li:last-child{
@@ -33,5 +33,18 @@
     border: none;
     font-size: 1.1em;
     color: var(--cream);
-    padding: 5px 10px;
+}
+
+.li:hover:first-child{
+    background: var(--red);
+    color: var(--cream);
+}
+
+.li:hover{
+    background: var(--light-blue);
+    color: var(--red)
+}
+
+.activeBtn{
+    background: var(--light-blue);
 }

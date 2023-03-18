@@ -8,6 +8,8 @@ export const ORDER_BY_NAME = "ORDER_BY_NAME";
 export const ORDER_BY_RATING = "ORDER_BY_RATING";
 export const GET_VIDEOGAMES_BY_NAME = "GET_VIDEOGAMES_BY_NAME";
 export const GET_DETAIL = "GET_DETAIL";
+export const CLEAR_DETAIL = "CLEAR_DETAIL";
+export const DELETE_GAME = "DELETE_GAME";
 
 export function getVideogames(){
     return async function(dispatch){
@@ -91,5 +93,18 @@ export function getDetail(id){
         }catch(err){
             console.log(err);
         }
+    }
+};
+
+export function clearDetail(){
+    return{
+        type: "CLEAR_DETAIL"
+    }
+};
+
+export function deleteGame(payload){
+    return async function(){
+        let json = await axios.delete(`http://localhost:3001/videogames/${payload}`);
+        return json;
     }
 };

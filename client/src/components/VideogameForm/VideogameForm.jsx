@@ -27,7 +27,8 @@ export default function VideogameForm(){
         released: '',
         rating: 1,
         platforms: [],
-        genres: []
+        genres: [],
+        img: ""
     });
 
     let handleChange = e => {
@@ -48,7 +49,18 @@ export default function VideogameForm(){
                 ...input,
                 genres : [...input.genres , e.target.value]
             })
+        }else{
+            e.target.name === 'platforms' ?
+            setInput({
+                ...input,
+                platforms : input.platforms.filter(f => f !== e.target.value)
+            }) :
+            setInput({
+                ...input,
+                genres : input.genres.filter(f => f !== e.target.value)
+            })
         }
+        
     }
 
     let validateForm = () => {
@@ -76,6 +88,10 @@ export default function VideogameForm(){
             setErrors("At least one genre required");
             return false;
         }
+        if(input.img.length > 250 ){
+            setErrors("Image url is too long");
+            return false;
+        }
         return true;
     }
     
@@ -90,7 +106,8 @@ export default function VideogameForm(){
                 released: '',
                 rating: 0,
                 platforms: [],
-                genres: []
+                genres: [],
+                img: ''
             })
             alert("successful");
             history.push('/home');
@@ -111,7 +128,7 @@ export default function VideogameForm(){
                             type='text'
                             value={input.name}
                             name='name'
-                            onChange={(e) => handleChange(e)}
+                            onChange={e => handleChange(e)}
                             required 
                         />
                     </div>
@@ -121,7 +138,17 @@ export default function VideogameForm(){
                             type='text'
                             value={input.description}
                             name='description'
-                            onChange={(e) => handleChange(e)}
+                            onChange={e => handleChange(e)}
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label>Image</label>
+                        <input
+                            type='text'
+                            value={input.img}
+                            name='img'
+                            onChange={e => handleChange(e)}
                             required
                         />
                     </div>
@@ -167,7 +194,7 @@ export default function VideogameForm(){
                         </div>
                     </div>
                     { errors ? <span>{errors}</span> : null }
-                    <button disabled={!input.name || !input.description || !input.platforms || !input.genres} type="submit">SEND</button>
+                    <button disabled={!input.name || !input.description || !input.platforms[0] || !input.genres[0]} type="submit">SEND</button>
                 </form>
             </div>
         </div>

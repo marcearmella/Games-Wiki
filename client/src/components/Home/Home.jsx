@@ -18,9 +18,7 @@ export default function Home(){
     const currentGames = allVideogames.slice(indexFirstGame,indexLastGame);
     const [order, setOrder] = useState('');
 
-    const paged = (pageNumber) => {
-        setCurrentPage(pageNumber);
-    }
+    const paged = pageNumber => setCurrentPage(pageNumber);
 
     useEffect(()=>{
         dispatch(getVideogames());
@@ -63,10 +61,15 @@ export default function Home(){
         <div>
             <div className={styles.navBar}>
                 <div className={styles.logo}>
-                    <h1>Videogames</h1>
-                    <h2>wiki</h2>
+                    <h1>Wiki Games</h1>
                 </div>
-                <SearchBar />
+                <div className={styles.searchContainer}>
+                    <SearchBar />
+                    <div className={styles.formContainer}>
+                        <NavLink to='/videogameform'><p className={styles.createGames}>Create a game</p></NavLink>
+                        <button onClick={e => {handleReload(e)}}>Reload</button>
+                    </div>
+                </div>
                 <div className={styles.selectsContainer}>
                     <div className={styles.orderSelect}>
                         <p>Order by</p>
@@ -98,24 +101,24 @@ export default function Home(){
                         </select>
                     </div>
                 </div>
-                <div className={styles.formContainer}>
-                    <NavLink to='/videogameform' className={styles.createGames}><p>Create Videogame</p></NavLink>
-                    <button onClick={e => {handleReload(e)}}>Reload games</button>
-                </div>
             </div>
-            <Paged gamesPerPage={gamesPerPage} allVideogames={allVideogames.length} paged={paged} />
-            
-            <div className={styles.cardsContainer}>
+            <Paged gamesPerPage={gamesPerPage} allVideogames={allVideogames.length} currentPage={currentPage} paged={paged} />
             {
-                currentGames?.map(e => {
-                    return(
-                        <div key={e.id}>
-                            <Card name={e.name} image={e.img} genres={e.genres} id={e.id} />
-                        </div>
-                    );
-                })
+                allVideogames === 'error404' ? 
+                    <div><h1>No games found!</h1></div> :
+                    <div className={styles.cardsContainer}>
+                    {
+                        currentGames?.map(e => {
+                            return(
+                                <div key={e.id}>
+                                    <Card name={e.name} image={e.img} genres={e.genres} id={e.id} />
+                                </div>
+                            );
+                        })
+                    }
+                    </div>
             }
-            </div>
+            
         </div>
     );
 };

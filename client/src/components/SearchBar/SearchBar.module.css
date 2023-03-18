@@ -1,18 +1,38 @@
+.searchBar{
+    width: 100%;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 35px;
+    margin: auto;
+}
+
 .searchBar input{
     text-align: center;
     font-size: 16px;
     border-radius: 5px 0 0 5px;
     border: #000 solid 1px;
-    padding: 3px 6px;
-    width: 220px;
+    padding: 0 6px;
+    width: 80%;
+    height: 40px;
 }
 
 .searchBar button{
     border: #000 solid 1px;
+    border-left: none;
     border-radius: 0 5px 5px 0;
-    font-size: 16px;
-    padding: 3px 6px;
+    font-size: 18px;
     background: var(--orange);
     color: var(--light-blue);
     cursor: pointer;
+    width: 20%;
+    height: 40px;
+    transition: .2s linear;
+}
+
+.searchBar button:hover{
+    background: var(--light-blue);
+    color: var(--orange);
 }

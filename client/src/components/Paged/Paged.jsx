@@ -1,7 +1,7 @@
 import React from "react";
 import styles from './Paged.module.css';
 
-export default function Paged({gamesPerPage, allVideogames, paged}){
+export default function Paged({gamesPerPage, allVideogames, currentPage, paged}){
 
     const pageNumber = [];
 
@@ -14,15 +14,14 @@ export default function Paged({gamesPerPage, allVideogames, paged}){
             <div>
                 <img src="https://thumbs.gfycat.com/HardPiercingEastrussiancoursinghounds-max-1mb.gif" alt="loading" />
             </div>
-        ) 
+        )
     }else{
         return(
             <nav className={styles.container}>
                 <ul className={styles.ul}>
-                    <li className={styles.li}>Pages</li>
                     {
                         pageNumber?.map( num => (
-                            <li className={styles.li} key={num}>
+                            <li className={currentPage == num ? `${styles.li} ${styles.activeBtn}` : styles.li} key={num} >
                                 <button onClick={() => paged(num)}>{num}</button>
                             </li>
                         ))

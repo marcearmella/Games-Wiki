@@ -1,4 +1,4 @@
-import { GET_ALL_VIDEOGAMES, GET_GENRES, FILTER_BY_GENRE, FILTER_BY_CREATED, ORDER_BY_NAME, ORDER_BY_RATING, GET_VIDEOGAMES_BY_NAME, GET_DETAIL } from "../actions";
+import { GET_ALL_VIDEOGAMES, GET_GENRES, FILTER_BY_GENRE, FILTER_BY_CREATED, ORDER_BY_NAME, ORDER_BY_RATING, GET_VIDEOGAMES_BY_NAME, GET_DETAIL, CLEAR_DETAIL, DELETE_GAME } from "../actions";
 
 const initialState = {
     allVideogames: [],
@@ -18,13 +18,14 @@ function rootReducer(state = initialState, action){
 
         case GET_GENRES:
             return {
-              ...state,
-              genres: action.payload,
+                ...state,
+                genres: action.payload,
             };
 
         case FILTER_BY_GENRE:
             let allVideogames = state.allVideogames;
             let gamesFilteredByGenre = action.payload === 'all' ? allVideogames : allVideogames.filter(e => e.genres.includes(action.payload));
+            if(!gamesFilteredByGenre[0]) gamesFilteredByGenre = "error404"
             return{
                 ...state,
                 videogames: gamesFilteredByGenre
@@ -35,6 +36,7 @@ function rootReducer(state = initialState, action){
             let gamesFilteredByCreated = action.payload === 'createdGames' ? 
                                             allVideogames2.filter(e => e.createdInDB) :
                                             allVideogames2.filter(e => !e.createdInDB);
+            if(!gamesFilteredByCreated[0]) gamesFilteredByCreated = "error404"
             return{
                 ...state,
                 videogames: action.payload === 'all' ? allVideogames2 : gamesFilteredByCreated
@@ -43,13 +45,13 @@ function rootReducer(state = initialState, action){
         case ORDER_BY_NAME:
             let gamesInOrderByName = action.payload === 'ascending' ? 
                                 state.videogames.sort(function(a,b){
-                                    if(a.name > b.name) return 1;
-                                    if(b.name > a.name) return -1;
+                                    if(a.name.toLowerCase() > b.name.toLowerCase()) return 1;
+                                    if(b.name.toLowerCase() > a.name.toLowerCase()) return -1;
                                     return 0;
                                 }) :
                                 state.videogames.sort(function(a,b){
-                                    if(a.name > b.name) return -1;
-                                    if(b.name > a.name) return 1;
+                                    if(a.name.toLowerCase() > b.name.toLowerCase()) return -1;
+                                    if(b.name.toLowerCase() > a.name.toLowerCase()) return 1;
                                     return 0;
                                 })
             return{
@@ -84,6 +86,12 @@ function rootReducer(state = initialState, action){
             return{
                 ...state,
                 detail: action.payload
+            }
+        
+        case CLEAR_DETAIL:
+            return{
+                ...state,
+                detail: []
             }
 
         default: return state;

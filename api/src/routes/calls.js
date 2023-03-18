@@ -81,6 +81,7 @@ const getDBInfo = async() => {
             rating: e.dataValues.rating,
             platforms: e.dataValues.platforms,
             genres: e.dataValues.genres.map(e => e.name),
+            img: e.dataValues.img,
             createdInDB: e.dataValues.createdInDB
         }
     });

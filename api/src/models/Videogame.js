@@ -34,6 +34,10 @@ module.exports = (sequelize) => {
       type: DataTypes.JSON,
       allowNull: false
     },
+    img: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
     createdInDB: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
