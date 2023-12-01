@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import { getVideogames, filterGamesByGenre, getGenres, filterGamesByCreated, orderByName, orderByRating } from "../../redux/actions";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import Card from '../Card/Card';
 import Paged from '../Paged/Paged';
 import SearchBar from '../SearchBar/SearchBar';
@@ -58,11 +58,13 @@ export default function Home(){
     }
 
     return(
-        <div>
+        <div className={styles.container}>
             <div className={styles.navBar}>
-                <div className={styles.logo}>
-                    <h1>Wiki Games</h1>
-                </div>
+                <Link to="/" style={{textDecoration: 'none'}}>
+                    <div className={styles.logo}>
+                        <h1>Games-Wiki</h1>
+                    </div>
+                </Link>
                 <div className={styles.searchContainer}>
                     <SearchBar />
                     <div className={styles.formContainer}>
@@ -110,15 +112,12 @@ export default function Home(){
                     {
                         currentGames?.map(e => {
                             return(
-                                <div key={e.id}>
-                                    <Card name={e.name} image={e.img} genres={e.genres} id={e.id} />
-                                </div>
+                                <Card name={e.name} key={e.id} image={e.img} genres={e.genres} id={e.id} />
                             );
                         })
                     }
                     </div>
             }
-            
         </div>
     );
 };

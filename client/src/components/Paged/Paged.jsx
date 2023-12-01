@@ -1,5 +1,6 @@
 import React from "react";
 import styles from './Paged.module.css';
+import loader from '../../media/loading.gif'
 
 export default function Paged({gamesPerPage, allVideogames, currentPage, paged}){
 
@@ -12,7 +13,7 @@ export default function Paged({gamesPerPage, allVideogames, currentPage, paged})
     if(!allVideogames){
         return(
             <div>
-                <img src="https://thumbs.gfycat.com/HardPiercingEastrussiancoursinghounds-max-1mb.gif" alt="loading" />
+                <img src={loader} className={styles.loader} alt="loading" />
             </div>
         )
     }else{

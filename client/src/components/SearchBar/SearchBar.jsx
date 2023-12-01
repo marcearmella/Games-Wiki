@@ -19,7 +19,7 @@ export default function SearchBar(){
     }
 
     return(
-        <div className={styles.searchBar}>
+        <div className={styles.container}>
             <input type='text' placeholder='Name of the game' onChange={e => handleInputChange(e)} />
             <button type="submit" onClick={e => handleSubmit(e)}>search</button>
         </div>

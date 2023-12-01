@@ -48,3 +48,17 @@
 .activeBtn{
     background: var(--light-blue);
 }
+
+.loader{
+    width: 100%;
+    max-width: 400px;
+}
+
+@media screen and (max-width: 700px){
+    .li button{
+        font-size: .8em;
+    }
+    .loader{
+        max-width: 200px;
+    }
+}
